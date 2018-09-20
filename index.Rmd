@@ -678,7 +678,7 @@ dat <- data.frame(
     2 * apply(Z_post_mean, 2, sd) / sqrt(nrow(Z_post_mean))))
 
 ggplot(data = dat, aes(x=year, y=Z)) + 
-  geom_point(data = subset(dat, year == 0),  aes(x=year, y=Z)) + 
+  geom_point(data = subset(dat, year == 0),  aes(x=year, y=Z), size=4) + 
   geom_line(data = subset(dat, year > 0),  aes(x=year, y=Z), color = "red") + 
   geom_ribbon(aes(ymin = lower_50, ymax = upper_50, fill = "red"), alpha = 0.5) +
   geom_ribbon(aes(ymin = lower_95, ymax = upper_95, fill = "red"), alpha = 0.25) +
