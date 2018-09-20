@@ -79,6 +79,18 @@ knitr::include_graphics(here("images", "future.png"))
 knitr::include_graphics(here("images", "pollen.png"))
 ```
 
+## Pollen Data 
+
+```{r, out.width='95%', echo=FALSE}
+knitr::include_graphics(here("images", "pollen-locations.png"))
+```
+
+## Fossil Pollen Data 
+
+```{r, out.width='95%', echo=FALSE}
+knitr::include_graphics(here("images", "fossil-pollen-locations.png"))
+```
+
 
 ## Model Framework
 
@@ -200,7 +212,7 @@ $\begin{align*}
 
 > * In each cube, researcher counts the first $N$ pollen grains and identifies to species.
 
-> * Raw data are counts of each species
+> * Raw data are counts of each species.
 
 
 ## Data Model
@@ -221,7 +233,7 @@ is an observation of a $d$-dimensional compositional count.
 
 ## Data Model
 
-* Compositional count vector $\mathbf{y} \left( \mathbf{s}_i, t \right)$ a function of latent proportions $\mathbf{p}\left( \mathbf{s}_i, t \right)$
+* Compositional count vector $\mathbf{y} \left( \mathbf{s}_i, t \right)$ a function of latent proportions $\mathbf{p}\left( \mathbf{s}_i, t \right)$.
 
 <br />
 
@@ -234,7 +246,7 @@ $\begin{align*}
 * $N\left( \mathbf{s}_i, t \right) = \sum_{j=1}^d y_{j}\left( \mathbf{s}_i, t \right)$ is the total count observed (fixed and known) for observation at location $\mathbf{s}_i$ and time $t$.
 
 
-* Compositional count vector $\mathbf{y} \left( \mathbf{s}_i, t \right)$ a function of latent proportions $\mathbf{p}\left( \mathbf{s}_i, t \right)$
+* Compositional count vector $\mathbf{y} \left( \mathbf{s}_i, t \right)$ a function of latent proportions $\mathbf{p}\left( \mathbf{s}_i, t \right)$.
 
 <br />
 
@@ -251,7 +263,7 @@ $\begin{align*}
 
 <br />
 
-* Marginalize out $\mathbf{p} \left( \mathbf{s}_i, t \right)$ to get Dirichlet-multinomial
+* Marginalize out $\mathbf{p} \left( \mathbf{s}_i, t \right)$ to get Dirichlet-multinomial.
 
 <br />
 
@@ -261,14 +273,7 @@ $\begin{align*}
 
 <br />
 
-# Process Model
-
-$\begin{align*}
-[\mathbf{Z}, \boldsymbol{\theta}_D, \boldsymbol{\theta}_P | \mathbf{y}] & \propto 
-[\mathbf{y} | \boldsymbol{\theta}_D, \mathbf{Z}]  \color{blue}{[\mathbf{Z} | \boldsymbol{\theta}_P]}[\boldsymbol{\theta}_D] [\boldsymbol{\theta}_P]
-\end{align*}$
-
-## Process Model
+## Overdispersion
 
 > * We model the Dirichlet-multinomial count data using the log link function:
 
@@ -287,7 +292,7 @@ $\begin{align*}
 > * $\boldsymbol{\beta}$ is a $q \times d$ dimensional matrix of regression coefficients.
 <!-- >     * For identifiability, fix the first intercept term $\beta_{11} = 0$. -->
 
-## Process Model
+## Calibration
 
 > * The $\mathbf{z} \left( \mathbf{s}_i, t \right)$s are observed only at $t$ = 1.
 
@@ -312,8 +317,7 @@ knitr::include_graphics(here("images", "pollen-linear-fit.png"))
 ```
 
 
-
-## Non-linear Process Model
+## Non-linear Calibration Model
 
 > * Vegetation response to climate is non-linear.
 
@@ -330,30 +334,34 @@ knitr::include_graphics(here("images", "pollen-linear-fit.png"))
 
 <br />
 
-> * Note that for $t \neq 1$, the $\mathbf{z} \left( \mathbf{s}_i, t \right)$s are unobserved
+> * Note that for $t \neq 1$, the $\mathbf{z} \left( \mathbf{s}_i, t \right)$s are unobserved.
 
 
-## Calibration Model
+## Non-linear Calibration Model
 
 ```{r, out.width='95%', echo=FALSE}
 knitr::include_graphics(here("images", "pollen-fit.png"))
 ```
 
+# Process Model
 
-# Dynamic Model
+$\begin{align*}
+[\mathbf{Z}, \boldsymbol{\theta}_D, \boldsymbol{\theta}_P | \mathbf{y}] & \propto 
+[\mathbf{y} | \boldsymbol{\theta}_D, \mathbf{Z}]  \color{blue}{[\mathbf{Z} | \boldsymbol{\theta}_P]}[\boldsymbol{\theta}_D] [\boldsymbol{\theta}_P]
+\end{align*}$
 
-## Process Model
+## Process Model | Dynamic Model
 > * We are interested in estimating the latent process $\mathbf{z} \left( \mathbf{s}, t \right)$.
 
 <br />
 
 > * The model can accommodate:
->     1) continuous vs. discrete space (geostatistical vs. CAR models) 
->     2) continuous vs. discrete time (stochastic process vs. AR models)
+>     1) continuous vs. discrete space (geostatistical vs. CAR models).
+>     2) continuous vs. discrete time (stochastic process vs. AR models).
 
 <br />
 
-> * For now, we focus on continuous space and discrete time
+> * For now, we focus on continuous space and discrete time.
 
 ## Dynamic Model
 
@@ -367,15 +375,23 @@ $\begin{align*}
 
 <hr style="height:8px; visibility:hidden;" />
 
-> * $\mathbf{M}(t) = \rho \mathbf{I}_n$ is a propogator matrix
+> * $\mathbf{M}(t) = \rho \mathbf{I}_n$ is a propogator matrix.
 
 > * $\mathbf{X} \left(t \right) \boldsymbol{\gamma}$ are the fixed effects from covariates like latitude, elevation, etc.
 
-> * $\boldsymbol{\eta} \left( t \right) \sim \operatorname{N} \left( \mathbf{0}, \tau^2 \mathbf{R}\left( \boldsymbol{\phi} \right) \right)$
+> * $\boldsymbol{\eta} \left( t \right) \sim \operatorname{N} \left( \mathbf{0}, \tau^2 \mathbf{R}\left( \boldsymbol{\phi} \right) \right)$.
 
-> * $\tau^2$ is the spatial process variance
+> * $\tau^2$ is the spatial process variance.
 
-> * $\mathbf{R} \left( \boldsymbol{\phi} \right)$ is a Mátern spatial covariance matrix with parameters $\boldsymbol{\phi}$
+> * $\mathbf{R} \left( \boldsymbol{\phi} \right)$ is a Mátern spatial covariance matrix with parameters $\boldsymbol{\phi}$.
+
+## Elevation covariates
+
+```{r, out.width='95%', echo=FALSE}
+# knitr::include_graphics(here("images", "pollen-simulation.png"))
+knitr::include_graphics("./images/elevation.png")
+```
+
 
 ## Time Uncertainty
 
@@ -386,8 +402,8 @@ $\begin{align*}
 
 
 > * For each observation fossil pollen observation an age-depth model gives a posterior distribution over dates.
->     * Define $\omega \left(\mathbf{s}_i, t \right)$ as P(age $\in (t-1, t)$). Then
-  >     * $[\mathbf{y} \left( \mathbf{s}_i, t \right) | \boldsymbol{\alpha} \left( \mathbf{s}_i, t \right) ] = \prod_{t=1}^T [\mathbf{y} \left( \mathbf{s}_i, t \right) | \boldsymbol{\alpha} \left( \mathbf{s}, t \right)]^{\omega_\left(\mathbf{s}_i, t \right)}$
+>     * Define $\omega \left(\mathbf{s}_i, t \right)$ as P(age $\in (t-1, t)$). 
+>     * $[\mathbf{y} \left( \mathbf{s}_i, t \right) | \boldsymbol{\alpha} \left( \mathbf{s}_i, t \right) ] = \prod_{t=1}^T [\mathbf{y} \left( \mathbf{s}_i, t \right) | \boldsymbol{\alpha} \left( \mathbf{s}, t \right)]^{\omega_\left(\mathbf{s}_i, t \right)}$.
 
 
 
@@ -490,20 +506,57 @@ for (t in 2:(tt+1)) {
 
 ## Simulated Reconstruction Temporal Trend
 
+
+
+<!-- ```{r, echo=FALSE, out.width='95%', message=FALSE, warning=FALSE} -->
+<!-- dat <- data.frame(  -->
+<!--   climate    = apply(climate, 2, mean),  -->
+<!--   year       = 1:(tt+1)*250, -->
+<!--   estimate   = c(NA, apply(Z_post, 3, mean)), -->
+<!--   lower_50   = c(NA, apply(apply(Z_post, c(1, 3), mean), 2, -->
+<!--                            quantile, prob = 0.25)), -->
+<!--   upper_50   = c(NA, apply(apply(Z_post, c(1, 3), mean), 2, -->
+<!--                            quantile, prob = 0.75)), -->
+<!--   lower_95   = c(NA, apply(apply(Z_post, c(1, 3), mean), 2, -->
+<!--                            quantile, prob = 0.025)), -->
+<!--   upper_95   = c(NA, apply(apply(Z_post, c(1, 3), mean), 2, -->
+<!--                            quantile, prob = 0.999975))) -->
+
+<!-- ggplot(data = dat, aes(x = year, y = climate)) + -->
+<!--    geom_line() +  -->
+<!--   geom_line(aes(x = year, y = estimate), color = "red") + -->
+<!--   geom_ribbon(aes(ymin = lower_50, ymax = upper_50), alpha = 0.5, fill="red") + -->
+<!--   geom_ribbon(aes(ymin = lower_95, ymax = upper_95), alpha = 0.25, fill="red") + -->
+<!--   ggtitle("Climate Trend in simulated degrees C") + -->
+<!--   ylab("simulated degrees C") + -->
+<!--   xlab("years in the past") + -->
+<!--   theme_bw() + -->
+<!--   theme(legend.position = "none", -->
+<!--         title = element_text(size=40),  -->
+<!--         axis.title = element_text(size=26),  -->
+<!--         axis.text = element_text(size=20))  -->
+<!-- ``` -->
+
+
 ```{r, echo=FALSE, out.width='95%', message=FALSE, warning=FALSE}
 dat <- data.frame( 
   climate    = apply(climate, 2, mean), 
   year       = 1:(tt+1)*250,
   estimate   = c(NA, apply(Z_post_mean, 2, mean)),
-  lower_ci   = c(NA, apply(Z_post_mean, 2, mean) -
+  lower_50   = c(NA, apply(Z_post_mean, 2, mean) -
+    0.674 * apply(Z_post_mean, 2, sd) / sqrt(nrow(Z_post_mean))),
+  upper_50   = c(NA, apply(Z_post_mean, 2, mean) + 
+    0.674 * apply(Z_post_mean, 2, sd) / sqrt(nrow(Z_post_mean))),
+  lower_95   = c(NA, apply(Z_post_mean, 2, mean) -
     2 * apply(Z_post_mean, 2, sd) / sqrt(nrow(Z_post_mean))),
-  upper_ci   = c(NA, apply(Z_post_mean, 2, mean) + 
+  upper_95   = c(NA, apply(Z_post_mean, 2, mean) + 
     2 * apply(Z_post_mean, 2, sd) / sqrt(nrow(Z_post_mean))))
 
 ggplot(data = dat, aes(x = year, y = climate)) +
    geom_line() + 
   geom_line(aes(x = year, y = estimate), color = "red") +
-  geom_ribbon(aes(ymin = lower_ci, ymax = upper_ci), alpha = 0.25, fill="red") +
+  geom_ribbon(aes(ymin = lower_50, ymax = upper_50), alpha = 0.5, fill="red") +
+  geom_ribbon(aes(ymin = lower_95, ymax = upper_95), alpha = 0.25, fill="red") +
   ggtitle("Climate Trend in simulated degrees C") +
   ylab("simulated degrees C") +
   xlab("years in the past") +
@@ -548,7 +601,7 @@ world <- subset(world, region %in% c("Italy", "Switzerland", "France"))
 
 
 
-```{r, fig.show='animate', cache=TRUE, message=FALSE, warning=FALSE}
+```{r reconstruction, fig.show='animate', cache=TRUE, message=FALSE, warning=FALSE, interval = 0.5}
 zlims <- range(dat_pred$climate)
 alims <- range(dat_pred$anomaly) 
 for (t in 1:tt) {
@@ -595,23 +648,34 @@ for (t in 1:tt) {
 }
 ```
 
-## Reconstruction in time
+## Reconstruction over time
 
-```{r}
+```{r, message=FALSE, warning=FALSE}
 Z_post_mean <- apply(Z_post, c(2, 3), mean)
-Z_post_lower_50 <- apply(Z_post, c(2, 3), quantile, prob=0.25)
-Z_post_upper_50 <- apply(Z_post, c(2, 3), quantile, prob=0.75)
-Z_post_lower_95 <- apply(Z_post, c(2, 3), quantile, prob=0.025)
-Z_post_upper_95 <- apply(Z_post, c(2, 3), quantile, prob=0.975)
+Z_post_lower_50 <- apply(apply(Z_post, c(1, 3), mean), 2, quantile, prob=0.25)
+Z_post_upper_50 <- apply(apply(Z_post, c(1, 3), mean), 2, quantile, prob=0.75)
+Z_post_lower_95 <- apply(apply(Z_post, c(1, 3), mean), 2, quantile, prob=0.025)
+Z_post_upper_95 <- apply(apply(Z_post, c(1, 3), mean), 2, quantile, prob=0.975)
 
-dat <- data.frame(
-  Z        = c(apply(cbind(c(data$Z0 * sd_X + mu_X), Z_post_mean), 2, mean)),
-  lower_50 = c(apply(cbind(NA, Z_post_lower_50), 2, mean)),
-  upper_50 = c(apply(cbind(NA, Z_post_upper_50), 2, mean)),  
-  lower_95 = c(apply(cbind(NA, Z_post_lower_95), 2, mean)),
-  upper_95 = c(apply(cbind(NA, Z_post_upper_95), 2, mean)), 
-  year     = 0:tt*250)
+# dat <- data.frame(
+#   Z        = c(apply(cbind(c(data$Z0 * sd_X + mu_X), Z_post_mean), 2, mean)),
+#   lower_50 = c(NA, Z_post_lower_50),
+#   upper_50 = c(NA, Z_post_upper_50),
+#   lower_95 = c(NA, Z_post_lower_95),
+#   upper_95 = c(NA, Z_post_upper_95),
+#   year     = 0:tt*250)
   
+dat <- data.frame(
+  year       = (0:tt)*250,
+  Z          = c(NA, apply(Z_post_mean, 2, mean)),
+  lower_50   = c(NA, apply(Z_post_mean, 2, mean) -
+    0.674 * apply(Z_post_mean, 2, sd) / sqrt(nrow(Z_post_mean))),
+  upper_50   = c(NA, apply(Z_post_mean, 2, mean) +
+    0.674 * apply(Z_post_mean, 2, sd) / sqrt(nrow(Z_post_mean))),
+  lower_95   = c(NA, apply(Z_post_mean, 2, mean) -
+    2 * apply(Z_post_mean, 2, sd) / sqrt(nrow(Z_post_mean))),
+  upper_95   = c(NA, apply(Z_post_mean, 2, mean) +
+    2 * apply(Z_post_mean, 2, sd) / sqrt(nrow(Z_post_mean))))
 
 ggplot(data = dat, aes(x=year, y=Z)) + 
   geom_line() +
@@ -626,6 +690,58 @@ ggplot(data = dat, aes(x=year, y=Z)) +
         axis.title = element_text(size=26), 
         axis.text = element_text(size=20)) 
 ```
+
+
+## Reconstruction Inference
+
+> * Current methods are site-level "transfer function" methods.
+>     * These methods ignore elevation, temporal autocorrleation, and spatial autocorrelation.
+>     * Sensitive to the data. 
+>     * Poor quantification of uncertainty.
+>     * Unclear how to choose among models.
+
+> * The spatial method is statistically principled.
+>     * Has higher power.
+>     * Smaller uncertainties that change with data (sample size, signal coherence, etc.). 
+>     * Can use model selection methods (information criterion, etc).
+
+## Reconstruction Inference
+
+```{r, out.width='100%'}
+# knitr::include_graphics(here("images", "Science.png"))
+knitr::include_graphics("./images/site-level-inference-reduced.png")
+```
+
+## Reconstruction Inference
+
+```{r, out.width='100%'}
+# knitr::include_graphics(here("images", "Science.png"))
+knitr::include_graphics("./images/site-level-inference.png")
+```
+
+# Conclusion
+
+## Conclusion
+
+
+**Model framework opens the door to answering meaningful questions:**
+
+> * Do pollen distributions change with elevation?
+>     * Covariate-sensitive parameterizations.
+
+> * Do pollen distributions change over space or time?
+>     * Regression coefficients vary over space/time.
+
+> * How to combine multiple proxies (tree rings, pollen, etc)?
+>     * Each proxy gets its own data model.
+>     * Proxies link to dynamic space-time process. 
+
+
+## Thanks for the attention
+
+\color{blue} jrtipton@uark.edu
+
+
 <!-- ```{r fit-animation, fig.show='animate', cache=TRUE, interval=0.5} -->
 <!-- lims <- range(c(climate, X_pred_full_obs)) -->
 
