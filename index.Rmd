@@ -35,25 +35,25 @@ knitr::opts_chunk$set(echo = FALSE,
 ## Introduction | Predicting the future by learning from the past
 
 ```{r}
-knitr::include_graphics(here("2018", "ksu", "images", "Science.png"))
+knitr::include_graphics(here("images", "Science.png"))
 ```
 
 ## Introduction | Predicting the future by learning from the past
 
 ```{r}
-knitr::include_graphics(here("2018", "ksu", "images", "past1.png"))
+knitr::include_graphics(here("images", "past1.png"))
 ```
 
 ## Introduction | Predicting the future by learning from the past
 
 ```{r}
-knitr::include_graphics(here("2018", "ksu", "images", "past2.png"))
+knitr::include_graphics(here("images", "past2.png"))
 ```
 
 ## Introduction | Predicting the future by learning from the past
 
 ```{r, out.width="50%"}
-knitr::include_graphics(here("2018", "ksu", "images", "future.png"))
+knitr::include_graphics(here("images", "future.png"))
 ```
 
 # Learning about the past
@@ -75,7 +75,7 @@ knitr::include_graphics(here("2018", "ksu", "images", "future.png"))
 ## Pollen Data
 
 ```{r, out.width='95%', echo=FALSE}
-knitr::include_graphics(here("2018", "ksu", "images", "pollen.png"))
+knitr::include_graphics(here("images", "pollen.png"))
 ```
 
 
@@ -307,7 +307,7 @@ $\begin{align*}
 ## Calibration Model
 
 ```{r, out.width='95%', echo=FALSE}
-knitr::include_graphics(here("2018", "ksu", "images", "pollen-linear-fit.png"))
+knitr::include_graphics(here("images", "pollen-linear-fit.png"))
 ```
 
 
@@ -335,7 +335,7 @@ knitr::include_graphics(here("2018", "ksu", "images", "pollen-linear-fit.png"))
 ## Calibration Model
 
 ```{r, out.width='95%', echo=FALSE}
-knitr::include_graphics(here("2018", "ksu", "images", "pollen-fit.png"))
+knitr::include_graphics(here("images", "pollen-fit.png"))
 ```
 
 
@@ -395,7 +395,7 @@ $\begin{align*}
 ## Simuated data
 
 ```{r, out.width='95%', echo=FALSE}
-knitr::include_graphics(here("2018", "ksu", "images", "pollen-simulation.png"))
+knitr::include_graphics(here("images", "pollen-simulation.png"))
 ```
 
 
