@@ -35,7 +35,8 @@ knitr::opts_chunk$set(echo = FALSE,
 ## Introduction | Predicting the future by learning from the past
 
 ```{r}
-knitr::include_graphics(here("images", "Science.png"))
+# knitr::include_graphics(here("images", "Science.png"))
+knitr::include_graphics("./images/Science.png")
 ```
 
 ## Introduction | Predicting the future by learning from the past
