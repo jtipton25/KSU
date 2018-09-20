@@ -395,7 +395,8 @@ $\begin{align*}
 ## Simuated data
 
 ```{r, out.width='95%', echo=FALSE}
-knitr::include_graphics(here("images", "pollen-simulation.png"))
+# knitr::include_graphics(here("images", "pollen-simulation.png"))
+knitr::include_graphics("./images/pollen-simulation.png")
 ```
 
 
