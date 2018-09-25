@@ -1,11 +1,27 @@
 ---
 title: "Spatio-temporal Reconstruction of Climate from Pollen"
 author: "John Tipton"
-date: "9/20/2018"
+date: "9/27/2018"
 output: 
   ioslides_presentation:
     widescreen: true
+bibliography: ksu.bib    
 ---
+
+<style>
+.newspaper {
+    -webkit-column-count: 2; /* Chrome, Safari, Opera */
+    -moz-column-count: 2; /* Firefox */
+    column-count: 2;
+    -webkit-column-gap: 0px; /* Chrome, Safari, Opera */
+    -moz-column-gap: 0px; /* Firefox */
+    column-gap: 0px;}
+</style>
+
+
+<!-- Things to add -->
+<!-- MVGP paper ideas -->
+<!-- Add citations -->
 
 ```{r setup, include=FALSE}
 library(ggplot2)
@@ -18,19 +34,38 @@ knitr::opts_chunk$set(echo = FALSE,
                       out.width = "85%", 
                       fig.width = 16,
                       fig.height = 9)
+## Option to change R code output font size
+def.chunk.hook  <- knitr::knit_hooks$get("chunk")
+knitr::knit_hooks$set(chunk = function(x, options) {
+  x <- def.chunk.hook(x, options)
+  ifelse(options$size != "normalsize", paste0("\\", options$size,"\n\n", x, "\n\n \\normalsize"), x)
+})
 ```
 
-# University of Arkansas Statistics Seminar
+```{r, echo=FALSE, message=FALSE}
+biblio <- bibtex::read.bib("ksu.bib")
+# biblio <- bibtex::read.bib(here("2018", "ksu", "KSU", "ksu.bib"))
+```
+
+# Kansas State University Statistics Seminar
 
 ## Introduction 
 
-> * Climate change is well understood globally.
+* Climate change is well understood globally.
 
-> * Climate change is less well understood locally.
+* Climate change is less well understood locally.
 
-> * Need for spatailly explicit reconstructions of climate variables.
+* Need for spatially explicit reconstructions of climate variables.
 
-> * Problem: data souruces are messy and noisy.
+* Problem: data sources are messy and noisy.
+
+## Local Prediction
+
+```{r, out.width='75%'}
+# knitr::include_graphics(here("images", "Science.png"))
+knitr::include_graphics("./images/Konza1.jpg")
+```
+
 
 ## Introduction | Predicting the future by learning from the past
 
@@ -39,37 +74,64 @@ knitr::opts_chunk$set(echo = FALSE,
 knitr::include_graphics("./images/Science.png")
 ```
 
-## Introduction | Predicting the future by learning from the past
+## Predicting the future by learning from the past
+
+* Vegetation composition and structure change from ice age to current period.
+
+* Using change in temperature to predict future vegetation change.
+
+<br />
 
 ```{r}
 knitr::include_graphics(here("images", "past1.png"))
 ```
 
-## Introduction | Predicting the future by learning from the past
+## Predicting the future by learning from the past
+
+* Classify compositional and structural change.
 
 ```{r}
 knitr::include_graphics(here("images", "past2.png"))
 ```
 
-## Introduction | Predicting the future by learning from the past
+## Predicting the future by learning from the past
 
-```{r, out.width="50%"}
+<div class="newspaper"> 
+
+* Ordered multi-logistic B-spline regression.
+
+<br />
+
+* Learn vegetation change in structure/composition given temperature change.
+
+<br />
+
+* Forecast future vegetation change.
+
+
+<br />
+
+<br />
+
+```{r, out.width="85%"}
 knitr::include_graphics(here("images", "future.png"))
 ```
+
+</div>
 
 # Learning about the past
 
 ## Climate proxy data
 
-> * Many ecological and phyiscal processes respond to climate over different time scales.
->     * Tree rings, corals, forest landscapes, ice rings, lake levels, etc.
+* Many ecological and physical processes respond to climate over different time scales.
+    * Tree rings, corals, forest landscapes, ice rings, lake levels, etc.
 
 <br />
 
-> * These processes are called **climate proxies**.
->     * They are proxy measurements for unobserved climate.
->     * Noisy and messy.
->     * Respond to a wide variety of non-climatic signals.
+* These processes are called **climate proxies**.
+    * They are proxy measurements for unobserved climate.
+    * Noisy and messy.
+    * Respond to a wide variety of non-climatic signals.
 
 # Pollen Data 
 
@@ -204,15 +266,15 @@ $\begin{align*}
 
 ## Data model 
 
-> * Describes how the data are collected and observed.
+* Describes how the data are collected and observed.
 
-> * Researchers take sediment samples from a lake.
+* Researchers take sediment samples from a lake.
 
-> * Take 1cm$^3$ cubes along the length of the sediment core.
+* Take 1cm$^3$ cubes along the length of the sediment core.
 
-> * In each cube, researcher counts the first $N$ pollen grains and identifies to species.
+* In each cube, researcher counts the first $N$ pollen grains and identifies to species.
 
-> * Raw data are counts of each species.
+* Raw data are counts of each species.
 
 
 ## Data Model
@@ -225,11 +287,11 @@ $\begin{align*}
 
 is an observation of a $d$-dimensional compositional count.
 
-> * $y_{j} \left( \mathbf{s}_i, t \right)$ is the count of species $j$ in the sample at location $\mathbf{s}_i$ and time $t$.
+* $y_{j} \left( \mathbf{s}_i, t \right)$ is the count of species $j$ in the sample at location $\mathbf{s}_i$ and time $t$.
 
-> * Compositional count data.
->     * Total count is not informative of the absolute composition. 
->     * Informative of the relative proportions $p_{j} \left( \mathbf{s}_i, t \right)$ only.
+* Compositional count data.
+   * Total count is not informative of the absolute composition. 
+   * Informative of the relative proportions $p_{j} \left( \mathbf{s}_i, t \right)$ only.
 
 ## Data Model
 
@@ -275,38 +337,63 @@ $\begin{align*}
 
 ## Overdispersion
 
-> * We model the Dirichlet-multinomial count data using the log link function:
+* We model the Dirichlet-multinomial count data using the log link function:
 
 <br />
 
-> * $\begin{align*}
+$\begin{align*}
 \operatorname{log} \left( \boldsymbol{\alpha} \left( \mathbf{s}_i, t \right) \right) & = \mathbf{z}\left( \mathbf{s}_i, t \right) \boldsymbol{\beta}.
 \end{align*}$
 
 <br />
 
-> * $\mathbf{z}\left( \mathbf{s}_i, t \right)$' is a $q$-dimensional vector of covariates. 
+* $\mathbf{z}\left( \mathbf{s}_i, t \right)$' is a $q$-dimensional vector of covariates. 
 
 <br />
 
-> * $\boldsymbol{\beta}$ is a $q \times d$ dimensional matrix of regression coefficients.
-<!-- >     * For identifiability, fix the first intercept term $\beta_{11} = 0$. -->
+* $\boldsymbol{\beta}$ is a $q \times d$ dimensional matrix of regression coefficients.
+    * For identifiability, fix the first intercept term $\beta_{11} = 0$.
+    
+    <br />
+
+## Functional Response
+
+* Can also estimate how the functional responses covary.
+    * Let $\boldsymbol{\Omega}$ be the functional correlations.
+    * $\boldsymbol{\Omega} = \mathbf{L}' \mathbf{L}$.
+    
+<br />
+
+$\begin{align*}
+\operatorname{log} \left( \boldsymbol{\alpha} \left( \mathbf{s}_i, t \right) \right) & = \mathbf{z}\left( \mathbf{s}_i, t \right) \boldsymbol{\beta} \mathbf{L}.
+\end{align*}$
+
+<br />
+
+* Represents sympatry/allopatry.
+
+<br />
+
+* Can be used to learn about ecological relationships among/between species.
+
+
+
 
 ## Calibration
 
-> * The $\mathbf{z} \left( \mathbf{s}_i, t \right)$s are observed only at $t$ = 1.
+* The $\mathbf{z} \left( \mathbf{s}_i, t \right)$s are observed only at $t$ = 1.
 
 <br />
 
-> * Calibration:
->     * Estimate $\boldsymbol{\beta}$ using:
->         * $\left( \mathbf{y} \left( \mathbf{s}_1, 1 \right), \ldots, \mathbf{y} \left( \mathbf{s}_n, 1 \right) \right)'$ and
->         * $\left( \mathbf{z} \left( \mathbf{s}_1, 1 \right), \ldots, \mathbf{z} \left( \mathbf{s}_n, 1 \right) \right)'$.
+* Calibration: Estimate $\boldsymbol{\beta}$ using:
+    * $\left( \mathbf{y} \left( \mathbf{s}_1, 1 \right), \ldots, \mathbf{y} \left( \mathbf{s}_n, 1 \right) \right)'$ and
+    * $\left( \mathbf{z} \left( \mathbf{s}_1, 1 \right), \ldots, \mathbf{z} \left( \mathbf{s}_n, 1 \right) \right)'$.
+
 
 <br />
 
-> * Reconstruction:
->     * Use estimated $\boldsymbol{\beta}$s and fossil pollen $\mathbf{y} \left( \mathbf{s}, t \right)$ to predict unobserved $\mathbf{z}\left( \mathbf{s}, t \right)$.
+* Reconstruction:
+    * Use estimated $\boldsymbol{\beta}$s and fossil pollen $\mathbf{y} \left( \mathbf{s}, t \right)$ to predict unobserved $\mathbf{z}\left( \mathbf{s}, t \right)$.
 
 <br />
 
@@ -319,22 +406,27 @@ knitr::include_graphics(here("images", "pollen-linear-fit.png"))
 
 ## Non-linear Calibration Model
 
-> * Vegetation response to climate is non-linear.
+* Vegetation response to climate is non-linear.
 
-<br />
+<hr style="height:8px; visibility:hidden;" />
 
-> * $\begin{align*}
+$\begin{align*}
 \operatorname{log} \left( \boldsymbol{\alpha} \left( \mathbf{s}_i, t \right) \right) & = \mathbf{B} \left( \mathbf{z}\left( \mathbf{s}_i, t \right) \right) \boldsymbol{\beta}
 \end{align*}$
 
+<hr style="height:8px; visibility:hidden;" />
+
+* $\mathbf{B} \left( \mathbf{z}\left( \mathbf{s}_i, t \right) \right)$ is a basis expansion of the covariates $\mathbf{z}\left( \mathbf{s}_i, t \right)$.
+    * Use B-splines or Gaussian Processes as a basis.
+    * $\mathbf{B} \left( \mathbf{z}\left( \mathbf{s}_i, t \right) \right)$ is random.  
+    * Computationally challenging.
+
 <br />
 
-> * $\mathbf{B} \left( \mathbf{z}\left( \mathbf{s}_i, t \right) \right)$ is a basis expansion of the covariates $\mathbf{z}\left( \mathbf{s}_i, t \right)$.
->     * Use B-splines or Gaussian Processes as a basis.
+* Note that for $t \neq 1$, the $\mathbf{z} \left( \mathbf{s}_i, t \right)$s are unobserved.
 
 <br />
 
-> * Note that for $t \neq 1$, the $\mathbf{z} \left( \mathbf{s}_i, t \right)$s are unobserved.
 
 
 ## Non-linear Calibration Model
@@ -351,17 +443,17 @@ $\begin{align*}
 \end{align*}$
 
 ## Process Model | Dynamic Model
-> * We are interested in estimating the latent process $\mathbf{z} \left( \mathbf{s}, t \right)$.
+* We are interested in estimating the latent process $\mathbf{z} \left( \mathbf{s}, t \right)$.
 
 <br />
 
-> * The model can accommodate:
->     1) continuous vs. discrete space (geostatistical vs. CAR models).
->     2) continuous vs. discrete time (stochastic process vs. AR models).
+* The model can accommodate:
+   1) continuous vs. discrete space (geostatistical vs. CAR models).
+   2) continuous vs. discrete time (stochastic process vs. AR models).
 
 <br />
 
-> * For now, we focus on continuous space and discrete time.
+* For now, we focus on continuous space and discrete time.
 
 ## Dynamic Model
 
@@ -375,15 +467,13 @@ $\begin{align*}
 
 <hr style="height:8px; visibility:hidden;" />
 
-> * $\mathbf{M}(t) = \rho \mathbf{I}_n$ is a propogator matrix.
+* $\mathbf{M}(t) = \rho \mathbf{I}_n$ is a propagator matrix.
 
-> * $\mathbf{X} \left(t \right) \boldsymbol{\gamma}$ are the fixed effects from covariates like latitude, elevation, etc.
+* $\mathbf{X} \left(t \right) \boldsymbol{\gamma}$ are the fixed effects from covariates like latitude, elevation, etc.
 
-> * $\boldsymbol{\eta} \left( t \right) \sim \operatorname{N} \left( \mathbf{0}, \tau^2 \mathbf{R}\left( \boldsymbol{\phi} \right) \right)$.
+* $\boldsymbol{\eta} \left( t \right) \sim \operatorname{N} \left( \mathbf{0}, \mathbf{R}\left( \boldsymbol{\theta} \right) \right)$.
 
-> * $\tau^2$ is the spatial process variance.
-
-> * $\mathbf{R} \left( \boldsymbol{\phi} \right)$ is a Mátern spatial covariance matrix with parameters $\boldsymbol{\phi}$.
+* $\mathbf{R} \left( \boldsymbol{\theta} \right)$ is a Mátern spatial covariance matrix with parameters $\boldsymbol{\theta}$.
 
 ## Elevation covariates
 
@@ -392,20 +482,157 @@ $\begin{align*}
 knitr::include_graphics("./images/elevation.png")
 ```
 
+## Scaling the process for big data
+
+* Define a set of spatial knot locations $\mathbf{s}^{\star} = \left\{ \mathbf{s}_1^{\star}, \ldots, \mathbf{s}_m^{\star} \right\}$.
+
+<hr style="height:8px; visibility:hidden;" />
+
+* $\boldsymbol{\eta}^{\star} \left( t \right) \sim \operatorname{N} \left( \mathbf{0}, \mathbf{R}^{\star}\left( \boldsymbol{\theta} \right) \right)$.
+
+<hr style="height:8px; visibility:hidden;" />
+
+* $\mathbf{R}^{\star}\left( \boldsymbol{\theta} \right)$ is the spatial covariance defined at the knot locations $\mathbf{s}^{\star}$.
+
+<hr style="height:8px; visibility:hidden;" />
+
+* The linear interpolator from observed location $\mathbf{s}_i$ to knot location $\mathbf{s}_j^{\star}$ is $\mathbf{r} \left(\mathbf{s}_i, \mathbf{s}_j^{\star} \right) \mathbf{R}^{\star}\left( \boldsymbol{\theta} \right)^{-1}$ where $\mathbf{r} \left(\mathbf{s}_i, \mathbf{s}_j^{\star} \right) 
+=  \operatorname{Cov} \left(\mathbf{s}_i, \mathbf{s}_j^{\star} \right)$
+
+<hr style="height:8px; visibility:hidden;" />
+
+<font size="3">
+`r capture.output(print(biblio["banerjee2008gaussian"]))`
+</font>
+
+## Predictive Process
+
+* $\boldsymbol{\eta} \left( t \right) \approx \mathbf{r} \left(\mathbf{s}, \mathbf{s}^{\star} \right) \mathbf{R}^{\star}\left( \boldsymbol{\theta} \right)^{-1} \tilde{\boldsymbol{\eta}} \left( t \right)$.
+
+* The predictive process can be shown to be the optimal predictor of the parent process $\boldsymbol{\eta} \left( t \right)$ of dimension $m$ 
+
+* The dynamic climate process becomes
+
+$\begin{align*}
+\mathbf{z} \left(t \right) - \mathbf{X} \left( t \right) \boldsymbol{\gamma} & \approx \mathbf{M}\left(t\right) \left( \mathbf{z} \left(t-1 \right) - \mathbf{X} \left( t \right) \boldsymbol{\gamma} \right) + \mathbf{r} \left(\mathbf{s}, \mathbf{s}^{\star} \right) \mathbf{R}^{\star}\left( \boldsymbol{\theta} \right)^{-1} \boldsymbol{\tilde{\eta}} \left(t \right)
+\end{align*}$
+
+
 
 ## Time Uncertainty
 
-> * Each fossil pollen observation includes estimates of time uncertainty.
->     * The time of the observation is uncertain.
->     * Weight the likelihoods according to age-depth model.
->     * Posterior distribution of ages.
+* Each fossil pollen observation includes estimates of time uncertainty.
+    * The time of the observation is uncertain.
+    * Weight the likelihoods according to age-depth model.
+    * Posterior distribution of ages.
+
+<br />
+
+* For each observation fossil pollen observation an age-depth model gives a posterior distribution over dates.
+    * Define $\omega \left(\mathbf{s}_i, t \right)$ as P(age $\in (t-1, t)$). 
+    * $[\mathbf{y} \left( \mathbf{s}_i, t \right) | \boldsymbol{\alpha} \left( \mathbf{s}_i, t \right) ] = \prod_{t=1}^T [\mathbf{y} \left( \mathbf{s}_i, t \right) | \boldsymbol{\alpha} \left( \mathbf{s}, t \right)]^{\omega_\left(\mathbf{s}_i, t \right)}$.
+
+# Implementation
+
+## gitHub package
+
+* Non-spatial code available as a [gitHub package](https://github.com/jtipton25/BayesComposition).
+
+```{r, eval=FALSE, echo=TRUE}
+devtools::install_github("jtipton25/BayesComposition")
+```
+
+<br />
+
+* Includes options for multiple models including:
+    * mixture models.
+    * different likelihoods and link functions.
+    * correlations in functional response.
+
+<br />
+
+* Code in `C++` using `Rcpp` package for computation speed.
 
 
-> * For each observation fossil pollen observation an age-depth model gives a posterior distribution over dates.
->     * Define $\omega \left(\mathbf{s}_i, t \right)$ as P(age $\in (t-1, t)$). 
->     * $[\mathbf{y} \left( \mathbf{s}_i, t \right) | \boldsymbol{\alpha} \left( \mathbf{s}_i, t \right) ] = \prod_{t=1}^T [\mathbf{y} \left( \mathbf{s}_i, t \right) | \boldsymbol{\alpha} \left( \mathbf{s}, t \right)]^{\omega_\left(\mathbf{s}_i, t \right)}$.
+## Computational Details 
+
+* The model is fit in stages:
+
+1) Estimate the fixed effect of elevation.
+
+2) Estimate the spatial residual model.
+    * Addresses multicollinearity.
+    * Type III sums of squares.
+    
+3) Fit Calibration model.
+
+4) Spatial Reconstruction.
+
+<font size="3">
+`r capture.output(print(biblio["hefley2017basis"]))`
+</font>
 
 
+## Estimation of $\mathbf{z} \left(\mathbf{s}, t \right)$
+
+* High-dimensional spatio-temporal process.
+    * Inefficient to sample with block Metropolis.
+    * Poor mixing of MCMC chains.
+    
+<br />
+
+* Non-linear transformation in the data model.
+    * Difficult to use Kalman Filtering.
+    
+<br />
+
+* Particle Filtering Methods.
+    * Difficult to implement, suffer from degeneracy.
+    * Posterior can be multi-modal.
+    
+    
+## Estimation of $\mathbf{z} \left(\mathbf{s}, t \right)$
+
+* Elliptical Slice Sampling.
+    * Assumes a Gaussian prior.
+    * Difficult to implement in a DLM framework.
+    * Requires no tuning.
+    * Efficiently samples in high dimensions.
+    * Easily explores multiple modes.
+
+<br />
+
+* Fit using adaptive block Metropolis within Gibbs and Elliptical Slice Sampling algorithms.
+
+<br />
+
+* Highly multi-modal posterior is efficiently explored within the sampler.
+
+<br />
+
+<font size="3">
+`r capture.output(print(biblio["murray2010elliptical"]))`
+</font>
+
+## Estimation of $\mathbf{z} \left(\mathbf{s}, t \right)$
+
+* For Gaussian process expansion of $\mathbf{z} \left( \mathbf{s}, t \right)$:
+    * The latent climate states are inputs into the covariance function.
+    * Covariance input locations (and distance) are random.
+    * Unique computational challenge.
+        * Total computational cost is prohibitive $O(d \frac{(Tn)^3}{3})$.
+    
+* Proposed solution:
+    * Predictive process representation.
+    * Reduced computation cost $O(d T \frac{m^3}{3})$
+    
+<!-- ## Elliptical Slice Sampling for DLMs -->
+
+
+
+<font size="3">
+`r capture.output(print(biblio["tipton2018mvgp"]))`
+</font>
 
 # Simulation Study
 
@@ -696,16 +923,152 @@ ggplot(data = dat, aes(x=year, y=Z)) +
 
 ## Reconstruction Inference
 
-> * Current methods are site-level "transfer function" methods.
->     * These methods ignore elevation, temporal autocorrleation, and spatial autocorrelation.
->     * Sensitive to the data. 
->     * Poor quantification of uncertainty.
->     * Unclear how to choose among models.
+* Current methods are site-level "transfer function" methods.
+    * These methods ignore elevation, temporal autocorrelation, and spatial autocorrelation.
+    * Sensitive to the data. 
+    * Poor quantification of uncertainty.
+    * Unclear how to choose among models.
 
-> * The spatial method is statistically principled.
->     * Has higher power.
->     * Smaller uncertainties that change with data (sample size, signal coherence, etc.). 
->     * Can use model selection methods (information criterion, etc).
+* The spatial method is statistically principled.
+    * Has higher power.
+    * Smaller uncertainties that change with data (sample size, signal coherence, etc.). 
+    * Can use model selection methods (information criterion, etc).
+
+## Competing Methods | Weighted averaging
+
+* Calibration:
+    * Find the "optimum" climate state for species $j$.
+
+$\begin{align*}
+\hat{\mu}_j = \frac{\sum_{i=1}^n y_{ij} z_i} {\sum_{i=1}^n y_{ij}}
+\end{align*}$
+
+* Prediction:
+    * Find the weighted optimum over all species
+    
+$\begin{align*}
+\hat{z} = \frac{\sum_{j=1}^d y_{j} \hat{\mu}_j} {\sum_{i=1}^n y_{ij}}
+\end{align*}$    
+
+## Competing Methods : Weighted averaging
+
+* $\hat{z}$ is a mean of means:
+    * Strong shrinkage to the mean.
+    * Bootstrap uncertainty estimates
+
+```{r, echo=FALSE, message=FALSE, out.width='60%'}
+modern <- read.csv("~/Google Drive/spatial-pollen/data/modern.csv")
+y <- as.matrix(modern[, 9:58])
+y <- y[, -which(colSums(y) == 0)]
+z <- modern$TColdQ
+N <- dim(y)[1]
+d <- dim(y)[2]
+y_prop <- matrix(0, N, d)
+for (i in 1:N) {
+  y_prop[i, ] <- y[i, ] / sum(y[i, ])
+}
+
+## Weighted averaging
+mu_hat <- rep(0, d)
+
+for (j in 1:d) {
+  mu_hat[j] <- sum(y_prop[, j] * z) / sum(y_prop[, j])
+}
+
+z_hat <- rep(0, N)
+for (i in 1:N) {
+  z_hat[i] <- sum(y_prop[i, ] * mu_hat) / sum(y_prop[i, ])
+}
+
+dat <- data.frame(
+  z        = z, 
+  z_hat    = z_hat) 
+
+lims = range(c(z, z_hat))
+
+
+ggplot(data=dat, aes(y=z_hat, x=z)) +
+  geom_point() +
+  theme(legend.position = "none") +
+  xlim(lims) + ylim(lims) +
+  ylab("Predicted") +
+  xlab("Observed") + 
+  ggtitle("Weighted Averaging") +
+  theme_bw() +
+  theme(legend.position = "none",
+        title = element_text(size=40), 
+        axis.title = element_text(size=26), 
+        axis.text = element_text(size=20)) 
+```
+
+
+## Competing Methods : Weighted averaging
+
+* "Deshrinking"
+    * Fit a regression model between $z$ and $\hat{z}$ in calibration data.
+    * "Boost" the estimate using the regression model in the past.
+    
+```{r, echo=FALSE, message=FALSE, out.width='65%'}
+dat <- data.frame(
+  z        = z, 
+  z_hat    = z_hat) 
+
+lims = range(c(z, z_hat))
+
+
+p1 <- ggplot(data=dat, aes(y=z_hat, x=z)) +
+  geom_point() +
+  theme(legend.position = "none") +
+  xlim(lims) + ylim(lims) +
+  ylab("Predicted") +
+  xlab("Observed") + 
+  ggtitle("Weighted Averaging") +
+  theme_bw() +
+  theme(legend.position = "none",
+        title = element_text(size=40), 
+        axis.title = element_text(size=26), 
+        axis.text = element_text(size=20)) +
+  geom_smooth(method = "lm")
+
+z_boosted <- coef(lm(z ~ z_hat))[1] +  coef(lm(z ~ z_hat))[2] * z_hat
+dat <- data.frame(
+  z         = z, 
+  z_hat     = z_hat, 
+  z_boosted = z_boosted) 
+
+lims = range(c(z, z_boosted))
+
+
+p2 <- ggplot(data=dat, aes(y=z_boosted, x=z)) +
+  geom_point() +
+  theme(legend.position = "none") +
+  xlim(lims) + ylim(lims) +
+  ylab("Boosted Prediction") +
+  xlab("Observed") + 
+  ggtitle("Weighted Averaging") +
+  theme_bw() +
+  theme(legend.position = "none",
+        title = element_text(size=40), 
+        axis.title = element_text(size=26), 
+        axis.text = element_text(size=20)) +
+  geom_abline(color="red")
+multiplot(p1, p2, cols=2)
+```
+
+## Competing Methods : Modern Analog
+
+* k-nearest neighbors.
+
+<br />
+
+* Neighborhood distance is based on similarity of composition vector.
+
+<br />
+
+* Highly dependent on good neighbors (analogues).
+    * Spatial model can "extrapolate" based on previously unseen compositions
+  
+
 
 ## Reconstruction Inference
 
@@ -728,15 +1091,15 @@ knitr::include_graphics("./images/site-level-inference.png")
 
 **Model framework opens the door to answering meaningful questions:**
 
-> * Do pollen distributions change with elevation?
->     * Covariate-sensitive parameterizations.
+* Do pollen distributions change with elevation?
+    * Covariate-sensitive parameterizations.
 
-> * Do pollen distributions change over space or time?
->     * Regression coefficients vary over space/time.
+* Do pollen distributions change over space or time?
+    * Regression coefficients vary over space/time.
 
-> * How to combine multiple proxies (tree rings, pollen, etc)?
->     * Each proxy gets its own data model.
->     * Proxies link to dynamic space-time process. 
+* How to combine multiple proxies (tree rings, pollen, etc)?
+    * Each proxy gets its own data model.
+    * Proxies link to dynamic space-time process. 
 
 
 ## Thanks for the attention
@@ -793,7 +1156,7 @@ knitr::include_graphics("./images/site-level-inference.png")
 <!-- multiplot(gsim1, gsim2, cols=2) -->
 <!-- ``` -->
 
-## 
+## Trend Comparison
 
 [pages2k](http://science.sciencemag.org/content/339/6124/1198)
 
